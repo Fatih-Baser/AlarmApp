@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
 
+
         if (isTiramisuPlus()) {
             ActivityCompat.requestPermissions(
                 this,

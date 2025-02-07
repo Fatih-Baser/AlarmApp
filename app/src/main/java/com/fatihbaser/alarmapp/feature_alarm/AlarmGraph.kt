@@ -8,9 +8,6 @@ object AlarmGraph {
 
     @Serializable
     data object AlarmList
-
     @Serializable
     data class AlarmDetail(val alarmId: String?)
-
-
 }
