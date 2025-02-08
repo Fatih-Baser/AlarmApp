@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -19,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,9 +34,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fatihbaser.alarmapp.R
+import com.fatihbaser.alarmapp.core.components.InputTimeTextField
+import com.fatihbaser.alarmapp.feature_alarm.components.DayChip
+import com.fatihbaser.alarmapp.feature_alarm.domain.DayValue
 import com.fatihbaser.alarmapp.ui.theme.AlarmAppTheme
 
 
@@ -69,10 +78,83 @@ private fun AddAlarmScreenMainContent(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(24.dp))
+        HourAndMinuteInputField(
+            hour = state.hour,
+            minute = state.minute,
+            onHourChange = {
+                onAction(AddEditAlarmAction.OnHourTextChange(it))
+            },
+            onMinuteChange = {
+                onAction(AddEditAlarmAction.OnMinuteTextChange(it))
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
 
+        AlarmNameSection(
+            alarmName=state.alarmName,
+            onAddAlarmNameClick = {
+                onAction(AddEditAlarmAction.OnAddEditAlarmNameClick)
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        AlarmRepeatDaysSection(
+            repeatDays = state.repeatDays,
+            onToggleDayChip = {
+                onAction(AddEditAlarmAction.OnDayChipToggle(it))
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
 
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            Text(
+                text="Alarm ringtone",
+                style= MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text=state.ringtone?.first ?: "None",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                    onAction(AddEditAlarmAction.OnAlarmRingtoneClick)
+                },
+                textAlign = TextAlign.End  )
+        }
+    Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier=Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Vibrate",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Switch(
+                checked = state.vibrate,
+                onCheckedChange = {
+                    onAction(AddEditAlarmAction.OnVibrateToggle)
+                }
+            )
+        }
     }
-
 }
 @Preview
 @Composable
@@ -80,10 +162,21 @@ private fun AddAlarmScreenPreview() {
     AlarmAppTheme {
         var state by remember { mutableStateOf(AddEditAlarmState(alarmName = "Work")) }
 
+
         AddAlarmScreenMainContent(
             state = state,
-
-        ) { }
+            onAction = { action ->
+                when (action) {
+                    is AddEditAlarmAction.OnHourTextChange -> {
+                        state = state.copy(hour = action.value.take(2))
+                    }
+                    is AddEditAlarmAction.OnMinuteTextChange -> {
+                        state = state.copy(minute = action.value.take(2))
+                    }
+                    else -> Unit
+                }
+            }
+        )
     }
 }
 @Composable
@@ -146,5 +239,90 @@ private fun HourAndMinuteInputField(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
+        InputTimeTextField(
+            value = hour,
+            onValueChange = onHourChange,
+            modifier = Modifier.weight(1f),
+        )
+        Text(
+            text = ":",
+            style = MaterialTheme.typography.displayMedium,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(horizontal = 10.dp)
+        )
+        InputTimeTextField(
+            value = minute,
+            onValueChange = onMinuteChange,
+            modifier = Modifier.weight(1f),
+        )
     }
 }
+@Composable
+private fun AlarmNameSection(
+    alarmName: String,
+    onAddAlarmNameClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    Row(
+        modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp)
+            .clickable(role = Role.Button) {
+                onAddAlarmNameClick()
+            },
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Text(
+            text = alarmName,
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text=alarmName,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.End,
+            maxLines = 1,
+            overflow= TextOverflow.Ellipsis
+        )
+
+
+    }
+}
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun AlarmRepeatDaysSection(
+    repeatDays: Set<DayValue>,
+    onToggleDayChip: (DayValue) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(10.dp))
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp)
+    ){
+        Text(
+            text = "Repeat",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            DayValue.entries.forEach { day ->
+                DayChip(
+                    dayValue = day,
+                    isSelected = repeatDays.contains(day),
+                    onClick = {onToggleDayChip(day)
+                    }
+                )
+        }
+    }
+}}
