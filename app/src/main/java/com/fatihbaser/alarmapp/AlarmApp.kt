@@ -1,6 +1,7 @@
 package com.fatihbaser.alarmapp
 
 import android.app.Application
+import com.fatihbaser.alarmapp.core.database.di.coreDatabaseModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext
@@ -16,7 +17,10 @@ class AlarmApp: Application() {
         startKoin {
             androidLogger()
             androidContext(this@AlarmApp)
-            appModule
+            modules(
+                appModule,
+                coreDatabaseModule
+            )
         }
     }
 }
