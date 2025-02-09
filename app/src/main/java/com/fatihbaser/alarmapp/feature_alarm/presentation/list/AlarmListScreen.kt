@@ -53,8 +53,26 @@ import com.fatihbaser.alarmapp.feature_alarm.domain.Alarm
 import com.fatihbaser.alarmapp.feature_alarm.domain.DayValue
 import com.fatihbaser.alarmapp.feature_alarm.presentation.util.getDummyAlarm
 import com.fatihbaser.alarmapp.ui.theme.AlarmAppTheme
+import org.koin.androidx.compose.koinViewModel
 
-class AlarmListScreen {
+
+@Composable
+fun AlarmListScreenRoot(
+    navigateToAddEditScreen: (alarmId: String?) -> Unit
+) {
+
+    AlarmListScreen(
+        state = AlarmListState(),
+        onAction = { action ->
+            when (action) {
+                AlarmListAction.OnAddNewAlarmClick -> navigateToAddEditScreen(null)
+                is AlarmListAction.OnAlarmClick -> navigateToAddEditScreen(action.id)
+                else -> {
+
+                }
+            }
+        }
+    )
 }
 
 @Composable
