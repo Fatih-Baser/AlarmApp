@@ -2,7 +2,9 @@ package com.fatihbaser.alarmapp.feature_alarm.presentation.add_edit
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.content.contentReceiver
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -22,6 +24,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.fatihbaser.alarmapp.R
 import com.fatihbaser.alarmapp.core.components.InputTimeTextField
 import com.fatihbaser.alarmapp.feature_alarm.components.DayChip
@@ -54,7 +58,80 @@ private fun AddAlarmScreen(
     onAction: (AddEditAlarmAction) -> Unit,
 ){
 
+    AddAlarmScreenMainContent(
+        state=state,
+        onAction=onAction
+    )
+    if(state.isDialogOpened){
+        Dialog(
+            onDismissRequest = {
+                onAction(AddEditAlarmAction.OnCloseEditAlarmNameDialogClick)
+            }
+        ) {
+            AddAlarmNameDialogContent(
+                alarmName = state.alarmName,
+                onValueChange = {
+                    onAction(AddEditAlarmAction.OnEditAlarmNameTextChange(it))
+                },
+                onSaveClick = {
+                    onAction(AddEditAlarmAction.OnCloseEditAlarmNameDialogClick)
+                }
+            )
+
+        }
+    }
 }
+
+
+@Composable
+private fun AddAlarmNameDialogContent(
+    alarmName: String,
+    onValueChange: (String) -> Unit,
+    onSaveClick: () -> Unit
+) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .clip(RoundedCornerShape(10.dp))
+        .background(MaterialTheme.colorScheme.background)
+        .padding(16.dp ))
+    {
+        Text(
+            text = "Alarm Name",
+            style=MaterialTheme.typography.bodyMedium
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        OutlinedTextField(
+            value = alarmName,
+            onValueChange = onValueChange,
+            textStyle = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+       Box(
+           modifier = Modifier.fillMaxWidth(),
+               contentAlignment=Alignment.CenterEnd
+       ){
+           Button(
+               onClick = onSaveClick,
+               contentPadding = PaddingValues(
+                   horizontal = 16.dp,
+                   vertical = 6.dp
+               ),
+               shape = RoundedCornerShape(30.dp),
+               colors = ButtonDefaults.buttonColors(
+                   disabledContentColor = MaterialTheme.colorScheme.surface
+               )
+           ){
+               Text(
+                   text = "Save",
+                   style = MaterialTheme.typography.bodyMedium,
+               )
+           }
+       }
+
+    }
+}
+
 @Composable
 private fun AddAlarmScreenMainContent(
     state: AddEditAlarmState,
@@ -326,3 +403,14 @@ private fun AlarmRepeatDaysSection(
         }
     }
 }}
+@Preview
+@Composable
+private fun AddAlarmNameDialogContentPreview() {
+    AlarmAppTheme {
+        AddAlarmNameDialogContent(
+            alarmName = "",
+            onValueChange = {},
+            onSaveClick = {}
+        )
+    }
+}
