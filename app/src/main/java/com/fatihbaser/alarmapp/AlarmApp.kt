@@ -2,6 +2,7 @@ package com.fatihbaser.alarmapp
 
 import android.app.Application
 import com.fatihbaser.alarmapp.core.database.di.coreDatabaseModule
+import com.fatihbaser.alarmapp.feature_alarm.data.di.featureAlarmDataModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext
@@ -19,7 +20,8 @@ class AlarmApp: Application() {
             androidContext(this@AlarmApp)
             modules(
                 appModule,
-                coreDatabaseModule
+                coreDatabaseModule,
+                featureAlarmDataModule
             )
         }
     }
