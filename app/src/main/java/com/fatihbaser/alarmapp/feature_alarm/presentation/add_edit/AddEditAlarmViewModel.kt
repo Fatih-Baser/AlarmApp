@@ -7,10 +7,10 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fatihbaser.alarmapp.core.domain.ValidateAlarmUseCase
-import com.fatihbaser.alarmapp.core.domain.ringtone.RingtoneManager
+import com.fatihbaser.alarmapp.core.ringtone.RingtoneManager
 import com.fatihbaser.alarmapp.core.util.formatNumberWithLeadingZero
 import com.fatihbaser.alarmapp.feature_alarm.domain.Alarm
-import com.fatihbaser.alarmapp.feature_alarm.domain.AlarmRepository
+import com.fatihbaser.alarmapp.core.domain.AlarmRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn

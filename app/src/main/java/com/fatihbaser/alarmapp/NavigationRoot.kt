@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import com.fatihbaser.alarmapp.core.domain.ringtone.NameAndUri
+import com.fatihbaser.alarmapp.core.ringtone.NameAndUri
 import com.fatihbaser.alarmapp.feature_alarm.AlarmGraph
 import com.fatihbaser.alarmapp.feature_alarm.presentation.add_edit.AddEditAlarmAction
 import com.fatihbaser.alarmapp.feature_alarm.presentation.add_edit.AddEditAlarmScreenRoot

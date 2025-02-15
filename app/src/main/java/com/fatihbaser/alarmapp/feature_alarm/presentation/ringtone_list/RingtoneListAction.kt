@@ -1,6 +1,6 @@
 package com.fatihbaser.alarmapp.feature_alarm.presentation.ringtone_list
 
-import com.fatihbaser.alarmapp.core.domain.ringtone.NameAndUri
+import com.fatihbaser.alarmapp.core.ringtone.NameAndUri
 
 
 sealed interface RingtoneListAction {

@@ -1,6 +1,6 @@
 package com.fatihbaser.alarmapp.feature_alarm.data.di
 
-import com.fatihbaser.alarmapp.feature_alarm.domain.AlarmRepository
+import com.fatihbaser.alarmapp.core.domain.AlarmRepository
 import com.fatihbaser.alarmapp.feature_alarm.data.AlarmRepositoryImpl
 import com.fatihbaser.alarmapp.core.domain.GetFutureDateUseCase
 import com.fatihbaser.alarmapp.core.domain.GetTimeLeftInSecondsUseCase

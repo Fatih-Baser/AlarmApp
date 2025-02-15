@@ -9,7 +9,7 @@ import com.fatihbaser.alarmapp.core.domain.GetFutureDateUseCase
 import com.fatihbaser.alarmapp.core.domain.GetTimeLeftInSecondsUseCase
 import com.fatihbaser.alarmapp.core.domain.GetTimeToSleepInSecondsUseCase
 import com.fatihbaser.alarmapp.feature_alarm.domain.Alarm
-import com.fatihbaser.alarmapp.feature_alarm.domain.AlarmRepository
+import com.fatihbaser.alarmapp.core.domain.AlarmRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest

@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fatihbaser.alarmapp.R
-import com.fatihbaser.alarmapp.core.domain.ringtone.NameAndUri
-import com.fatihbaser.alarmapp.core.domain.ringtone.SILENT
+import com.fatihbaser.alarmapp.core.ringtone.NameAndUri
+import com.fatihbaser.alarmapp.core.ringtone.SILENT
 import com.fatihbaser.alarmapp.ui.theme.AlarmAppTheme
 import org.koin.androidx.compose.koinViewModel
 

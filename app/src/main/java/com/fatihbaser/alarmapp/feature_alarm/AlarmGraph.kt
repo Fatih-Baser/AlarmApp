@@ -1,6 +1,6 @@
 package com.fatihbaser.alarmapp.feature_alarm
 
-import com.fatihbaser.alarmapp.core.domain.ringtone.NameAndUri
+import com.fatihbaser.alarmapp.core.ringtone.NameAndUri
 import kotlinx.serialization.Serializable
 
 object AlarmGraph {

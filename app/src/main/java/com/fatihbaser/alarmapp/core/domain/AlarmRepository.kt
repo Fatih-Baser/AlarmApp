@@ -1,11 +1,17 @@
-package com.fatihbaser.alarmapp.feature_alarm.domain
+package com.fatihbaser.alarmapp.core.domain
 
+import com.fatihbaser.alarmapp.feature_alarm.domain.Alarm
+import com.fatihbaser.alarmapp.feature_alarm.domain.DayValue
 import kotlinx.coroutines.flow.Flow
 
 interface AlarmRepository {
     fun getAll(): Flow<List<Alarm>>
     suspend fun getById(id: String): Alarm?
     suspend fun upsert(alarm: Alarm)
+
+    /**
+     * We can enable or disable an alarm. It should be scheduled or cancelled from AlarmManager
+     */
     suspend fun toggle(alarm: Alarm)
     suspend fun toggleDay(day: DayValue, alarm: Alarm)
 
@@ -15,4 +21,16 @@ interface AlarmRepository {
     suspend fun disableAlarmById(id: String)
     suspend fun deleteById(id: String)
     suspend fun scheduleAllEnabledAlarms()
+
+    /**
+     * Play vibration and ringtone
+     */
+    fun setupEffects(alarm: Alarm)
+
+    /**
+     * Stop vibration and ringtone
+     */
+    fun stopEffectsAndHideNotification(alarm: Alarm)
+
+    fun alarmC(alarm: Alarm)
 }

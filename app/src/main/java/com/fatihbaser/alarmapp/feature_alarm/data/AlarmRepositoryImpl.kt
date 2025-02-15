@@ -4,11 +4,14 @@ import android.content.Context
 import android.os.VibrationEffect
 import android.os.Vibrator
 import com.fatihbaser.alarmapp.core.database.alarm.AlarmDao
-import com.fatihbaser.alarmapp.core.domain.ringtone.RingtoneManager
 import com.fatihbaser.alarmapp.feature_alarm.data.mapper.toAlarm
 import com.fatihbaser.alarmapp.feature_alarm.data.mapper.toAlarmEntity
 import com.fatihbaser.alarmapp.feature_alarm.domain.Alarm
-import com.fatihbaser.alarmapp.feature_alarm.domain.AlarmRepository
+import com.fatihbaser.alarmapp.core.domain.AlarmRepository
+import com.fatihbaser.alarmapp.core.ringtone.RingtoneManager
+import com.fatihbaser.alarmapp.core.util.hideNotification
+import com.fatihbaser.alarmapp.core.util.isOreoPlus
+import com.fatihbaser.alarmapp.feature_alarm.domain.AlarmConstants
 import com.fatihbaser.alarmapp.feature_alarm.domain.AlarmScheduler
 import com.fatihbaser.alarmapp.feature_alarm.domain.DayValue
 import kotlinx.coroutines.flow.Flow
@@ -17,8 +20,8 @@ import kotlinx.coroutines.flow.map
 
 class AlarmRepositoryImpl(
     private val alarmDao: AlarmDao,
-   // private val alarmScheduler: AlarmScheduler,
-   // private val ringtoneManager: RingtoneManager,
+    private val alarmScheduler: AlarmScheduler,
+    private val ringtoneManager: RingtoneManager,
     private val context: Context
 ): AlarmRepository {
 
@@ -36,7 +39,7 @@ class AlarmRepositoryImpl(
 
     override suspend fun upsert(alarm: Alarm) {
         alarmDao.upsert(alarm.toAlarmEntity())
-        //alarmScheduler.schedule(alarm)
+        alarmScheduler.schedule(alarm)
     }
 
     override suspend fun toggle(alarm: Alarm) {
@@ -44,15 +47,15 @@ class AlarmRepositoryImpl(
         alarmDao.upsert(alarm.copy(enabled = isEnabled).toAlarmEntity())
 
         if (isEnabled) {
-          //  alarmScheduler.schedule(alarm)
+            alarmScheduler.schedule(alarm)
         } else {
-           // alarmScheduler.cancel(alarm)
+            alarmScheduler.cancel(alarm)
         }
     }
 
     override suspend fun toggleDay(day: DayValue, alarm: Alarm) {
         // Cancel alarm first to avoid conflict.
-        //alarmScheduler.cancel(alarm)
+        alarmScheduler.cancel(alarm)
 
 
         val repeatDays = alarm.repeatDays.toMutableSet()
@@ -74,7 +77,7 @@ class AlarmRepositoryImpl(
 
     override suspend fun deleteById(id: String) {
         getById(id)?.let {
-           // alarmScheduler.cancel(it)
+            alarmScheduler.cancel(it)
         }
 
         alarmDao.deleteById(id)
@@ -83,12 +86,12 @@ class AlarmRepositoryImpl(
     override suspend fun scheduleAllEnabledAlarms() {
         getAll().first().map { alarm ->
             if (alarm.enabled) {
-             //   alarmScheduler.schedule(alarm)
+                alarmScheduler.schedule(alarm)
             }
         }
     }
 
-   /* override fun setupEffects(alarm: Alarm) {
+    override fun setupEffects(alarm: Alarm) {
         val pattern = AlarmConstants.VIBRATE_PATTERN_LONG_ARR
         if (isOreoPlus() && alarm.vibrate) {
             vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0))
@@ -106,10 +109,11 @@ class AlarmRepositoryImpl(
         vibrator.cancel()
     }
 
-    override fun snoozeAlarm(alarm: Alarm) {
+    override fun alarmC(alarm: Alarm) {
         alarmScheduler.schedule(
             alarm = alarm,
             shouldSnooze = true
         )
-    }*/
+    }
+
 }

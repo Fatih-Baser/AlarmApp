@@ -5,6 +5,7 @@ import com.fatihbaser.alarmapp.core.database.di.coreDatabaseModule
 import com.fatihbaser.alarmapp.core.ringtone.di.coreRingtoneModule
 import com.fatihbaser.alarmapp.feature_alarm.data.di.featureAlarmDataModule
 import com.fatihbaser.alarmapp.feature_alarm.data.di.featureAlarmPresentationModule
+import com.fatihbaser.alarmapp.feature_alarm.schedular_receiver.di.featureAlarmSchedulerReceiverModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext
@@ -27,7 +28,7 @@ class AlarmApp: Application() {
                 coreRingtoneModule,
                 featureAlarmDataModule,
                 featureAlarmPresentationModule,
-                //featureAlarmSchedulerReceiverModule
+                featureAlarmSchedulerReceiverModule
             )
         }
     }}

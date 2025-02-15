@@ -1,6 +1,6 @@
 package com.fatihbaser.alarmapp.feature_alarm.presentation.add_edit
 
-import com.fatihbaser.alarmapp.core.domain.ringtone.NameAndUri
+import com.fatihbaser.alarmapp.core.ringtone.NameAndUri
 import com.fatihbaser.alarmapp.feature_alarm.domain.DayValue
 
 data class AddEditAlarmState(

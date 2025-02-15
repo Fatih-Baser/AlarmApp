@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fatihbaser.alarmapp.core.domain.ringtone.NameAndUri
-import com.fatihbaser.alarmapp.core.domain.ringtone.RingtoneManager
-import com.fatihbaser.alarmapp.core.domain.ringtone.SILENT
+import com.fatihbaser.alarmapp.core.ringtone.NameAndUri
+import com.fatihbaser.alarmapp.core.ringtone.RingtoneManager
+import com.fatihbaser.alarmapp.core.ringtone.SILENT
 import kotlinx.coroutines.launch
 
 

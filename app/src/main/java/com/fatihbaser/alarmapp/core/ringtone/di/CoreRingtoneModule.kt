@@ -1,6 +1,6 @@
 package com.fatihbaser.alarmapp.core.ringtone.di
 
-import com.fatihbaser.alarmapp.core.domain.ringtone.RingtoneManager
+import com.fatihbaser.alarmapp.core.ringtone.RingtoneManager
 import com.fatihbaser.alarmapp.core.ringtone.AndroidRingtoneManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.bind

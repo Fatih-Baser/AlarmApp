@@ -1,4 +1,4 @@
-package com.fatihbaser.alarmapp.core.domain.ringtone
+package com.fatihbaser.alarmapp.core.ringtone
 
 const val SILENT = "silent"
 const val ALARM_MAX_REMINDER_MILLIS = 300_000L
