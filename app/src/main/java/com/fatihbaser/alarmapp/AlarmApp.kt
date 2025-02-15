@@ -2,6 +2,7 @@ package com.fatihbaser.alarmapp
 
 import android.app.Application
 import com.fatihbaser.alarmapp.core.database.di.coreDatabaseModule
+import com.fatihbaser.alarmapp.core.ringtone.di.coreRingtoneModule
 import com.fatihbaser.alarmapp.feature_alarm.data.di.featureAlarmDataModule
 import com.fatihbaser.alarmapp.feature_alarm.data.di.featureAlarmPresentationModule
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +24,7 @@ class AlarmApp: Application() {
             modules(
                 appModule,
                 coreDatabaseModule,
-                //coreRingtoneModule,
+                coreRingtoneModule,
                 featureAlarmDataModule,
                 featureAlarmPresentationModule,
                 //featureAlarmSchedulerReceiverModule

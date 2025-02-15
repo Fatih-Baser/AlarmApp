@@ -7,6 +7,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fatihbaser.alarmapp.core.domain.ValidateAlarmUseCase
+import com.fatihbaser.alarmapp.core.domain.ringtone.RingtoneManager
 import com.fatihbaser.alarmapp.core.util.formatNumberWithLeadingZero
 import com.fatihbaser.alarmapp.feature_alarm.domain.Alarm
 import com.fatihbaser.alarmapp.feature_alarm.domain.AlarmRepository
@@ -22,8 +23,9 @@ class AddEditAlarmViewModel(
     private val alarmId: String?,
     private val alarmRepository: AlarmRepository,
     private val validateAlarmUseCase: ValidateAlarmUseCase,
-    //private val ringtoneManager: RingtoneManager
+    private val ringtoneManager: RingtoneManager
 ): ViewModel() {
+
     var state by mutableStateOf(AddEditAlarmState())
         private set
 
@@ -44,30 +46,31 @@ class AddEditAlarmViewModel(
 
     private fun getExistingAlarm() = viewModelScope.launch {
         val existingAlarm = alarmId?.let { alarmRepository.getById(it) } ?: run {
-            //setDefaultRingtone()
+            setDefaultRingtone()
             return@launch
         }
-       /* val ringtone = ringtoneManager
+        val ringtone = ringtoneManager
             .getAvailableRingtones().let { ringtones ->
                 ringtones.firstOrNull { (_, uri) -> uri == existingAlarm.ringtoneUri }
                     ?: ringtones.getOrNull(1)
-            }*/
+            }
 
         state = state.copy(
             alarmName = existingAlarm.name,
             hour = formatNumberWithLeadingZero(existingAlarm.hour),
             minute = formatNumberWithLeadingZero(existingAlarm.minute),
             repeatDays = existingAlarm.repeatDays,
+            ringtone = ringtone,
             volume = (existingAlarm.volume / 100f),
             vibrate = existingAlarm.vibrate
         )
     }
 
     private suspend fun setDefaultRingtone() {
-       // val ringtone = ringtoneManager.getAvailableRingtones().getOrNull(1)
+        val ringtone = ringtoneManager.getAvailableRingtones().getOrNull(1)
 
         state = state.copy(
-       //     ringtone = ringtone
+            ringtone = ringtone
         )
     }
 

@@ -17,6 +17,8 @@ import com.fatihbaser.alarmapp.feature_alarm.presentation.add_edit.AddEditAlarmA
 import com.fatihbaser.alarmapp.feature_alarm.presentation.add_edit.AddEditAlarmScreenRoot
 import com.fatihbaser.alarmapp.feature_alarm.presentation.add_edit.AddEditAlarmViewModel
 import com.fatihbaser.alarmapp.feature_alarm.presentation.list.AlarmListScreenRoot
+import com.fatihbaser.alarmapp.feature_alarm.presentation.ringtone_list.RingtoneListScreenRoot
+import com.fatihbaser.alarmapp.feature_alarm.presentation.ringtone_list.RingtoneListViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -52,20 +54,32 @@ private fun NavGraphBuilder.alarmGraph(navController: NavHostController) {
                 viewModel.onAction(AddEditAlarmAction.OnAlarmRingtoneChange(nameAndUri))
             }
 
-
             AddEditAlarmScreenRoot(
                 navigateBack = {
                     navController.navigateUp()
                 },
                 navigateToRingtoneList = {
                     val (name, uri) = viewModel.state.ringtone ?: Pair(null, null)
-                   // navController.navigate(AlarmGraph.RingtoneList(name, uri))
+                    navController.navigate(AlarmGraph.RingtoneList(name, uri))
                 },
                 viewModel = viewModel
             )
         }
 
+                composable<AlarmGraph.RingtoneList> { entry ->
+            val ringtoneListRoute: AlarmGraph.RingtoneList = entry.toRoute()
+            val viewModel: RingtoneListViewModel = koinViewModel { parametersOf(ringtoneListRoute.getNameAndUri()) }
 
+            RingtoneListScreenRoot(
+                onRingtoneSelected = {
+                    navController.previousBackStackEntry?.savedStateHandle?.set("selectedRingtone", it)
+                },
+                navigateBack = {
+                    navController.navigateUp()
+                },
+                viewModel = viewModel
+            )
+        }
     }
 }
 

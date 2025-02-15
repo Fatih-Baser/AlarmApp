@@ -33,8 +33,33 @@ import com.fatihbaser.alarmapp.R
 import com.fatihbaser.alarmapp.core.domain.ringtone.NameAndUri
 import com.fatihbaser.alarmapp.core.domain.ringtone.SILENT
 import com.fatihbaser.alarmapp.ui.theme.AlarmAppTheme
+import org.koin.androidx.compose.koinViewModel
 
-class RingtoneListScreen {
+@Composable
+fun RingtoneListScreenRoot(
+    onRingtoneSelected: (NameAndUri) -> Unit,
+    navigateBack: () -> Unit,
+    viewModel: RingtoneListViewModel = koinViewModel()
+) {
+    val state = viewModel.state
+
+    BackHandler {
+        viewModel.onAction(RingtoneListAction.OnBackClick)
+        navigateBack()
+    }
+
+    RingtoneListScreen(
+        ringtones = state.ringtones,
+        selectedRingtone = state.selectedRingtone,
+        onRingtoneSelected = {
+            viewModel.onAction(RingtoneListAction.OnRingtoneSelected(it))
+            onRingtoneSelected(it)
+        },
+        onBackClick = {
+            viewModel.onAction(RingtoneListAction.OnBackClick)
+            navigateBack()
+        }
+    )
 }
 
 @Composable
