@@ -4,7 +4,7 @@ const val SILENT = "silent"
 const val ALARM_MAX_REMINDER_MILLIS = 300_000L
 typealias NameAndUri = Pair<String, String>
 
-interface RingtoneManager {
+        interface RingtoneManager {
 
     /**
      * @return A list of pair (name of ringtone & uri)

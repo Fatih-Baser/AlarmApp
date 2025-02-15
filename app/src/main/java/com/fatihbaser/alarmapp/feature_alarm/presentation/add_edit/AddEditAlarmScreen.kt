@@ -1,5 +1,6 @@
 package com.fatihbaser.alarmapp.feature_alarm.presentation.add_edit
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.content.contentReceiver
@@ -35,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
@@ -44,12 +46,48 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.fatihbaser.alarmapp.R
 import com.fatihbaser.alarmapp.core.components.InputTimeTextField
+import com.fatihbaser.alarmapp.core.presentation.ui.ObserveAsEvents
+import com.fatihbaser.alarmapp.core.util.showToast
 import com.fatihbaser.alarmapp.feature_alarm.components.DayChip
 import com.fatihbaser.alarmapp.feature_alarm.domain.DayValue
 import com.fatihbaser.alarmapp.ui.theme.AlarmAppTheme
+import org.koin.androidx.compose.koinViewModel
 
+@Composable
+fun AddEditAlarmScreenRoot(
+    navigateBack: () -> Unit,
+    navigateToRingtoneList: () -> Unit,
+    viewModel: AddEditAlarmViewModel = koinViewModel()
+) {
+    val context = LocalContext.current
 
-class AddEditAlarmScreen {
+    BackHandler {
+        navigateBack()
+    }
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            AddEditAlarmEvent.OnSuccess -> {
+                navigateBack()
+            }
+            is AddEditAlarmEvent.OnFailure -> {
+                context.showToast(event.uiText.asString(context))
+            }
+        }
+    }
+
+    AddAlarmScreen(
+        state = viewModel.state,
+        onAction = { action ->
+            when (action) {
+                AddEditAlarmAction.OnCloseClick -> {
+                    navigateBack()
+                }
+                AddEditAlarmAction.OnAlarmRingtoneClick -> navigateToRingtoneList()
+                else -> viewModel.onAction(action)
+            }
+        }
+    )
 }
 
 @Composable
